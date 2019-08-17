@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">  
+  <head>    
+    <title>ShoppingList</title>    
+    <meta charset="UTF-8">
+    <meta name="title" content="Título de la WEB">
+    <meta name="description" content="Descripción de la WEB">    
+    <link href="http://dominio.com/hoja-de-estilos.css" rel="stylesheet" type="text/css"/>    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+   </head>  
+  <body>   
+      <nav> 
+          <div class="nav-wrapper">
+              <a  class="brand-logo center">Shopping List</a> 
+          </div>
+      </nav>
+      <ul class="collection">
+      </ul>
+      <script>
+         const electron = require('electron');
+         const {ipcRenderer} = electron;
+         const ul = document.querySelector('ul');
+
+         // Add item
+         ipcRenderer.on('item:add', function(e,item){
+             ul.className = "collection";
+             const li = document.createElement('li');
+             li.className = "collection-item";
+             const itemText = document.createTextNode(item);
+             li.appendChild(itemText);
+             ul.appendChild(li);
+         });
+         
+         // Clear item
+         ipcRenderer.on('item:clear', function(){
+             ul.innerHTML = "";
+             ul.className = '';
+         });
+         
+         // Remove item 
+         ul.addEventListener('dblclick', removeItem);
+
+         function removeItem(e){
+            e.target.remove();
+            if(ul.children.length == 0){
+               ul.className = '';
+            }
+         }
+
+     </script>  
+  </body>  
+</html>
